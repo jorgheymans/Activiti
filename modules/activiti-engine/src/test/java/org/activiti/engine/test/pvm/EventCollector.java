@@ -15,7 +15,8 @@ package org.activiti.engine.test.pvm;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
@@ -27,7 +28,7 @@ import org.activiti.engine.impl.pvm.delegate.ExecutionListenerExecution;
  */
 public class EventCollector implements ExecutionListener {
   
-  private static Logger log = Logger.getLogger(EventCollector.class.getName());
+  private static Logger log = LoggerFactory.getLogger(EventCollector.class.getName());
   
   public List<String> events = new ArrayList<String>(); 
 
@@ -37,7 +38,7 @@ public class EventCollector implements ExecutionListener {
   
   public void notify(ExecutionListenerExecution execution) {
     
-    log.fine("collecting event: "+execution.getEventName()+" on "+execution.getEventSource());
+    log.debug("collecting event: "+execution.getEventName()+" on "+execution.getEventSource());
     events.add(execution.getEventName()+" on "+execution.getEventSource());
   }
   

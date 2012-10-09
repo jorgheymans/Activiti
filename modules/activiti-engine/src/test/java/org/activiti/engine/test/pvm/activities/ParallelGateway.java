@@ -14,7 +14,8 @@ package org.activiti.engine.test.pvm.activities;
 
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
@@ -27,7 +28,7 @@ import org.activiti.engine.impl.pvm.runtime.ExecutionImpl;
  */
 public class ParallelGateway implements ActivityBehavior {
   
-  private static Logger log = Logger.getLogger(ParallelGateway.class.getName());
+  private static Logger log = LoggerFactory.getLogger(ParallelGateway.class.getName());
   
   public void execute(ActivityExecution execution) {
     PvmActivity activity = execution.getActivity();
@@ -42,11 +43,11 @@ public class ParallelGateway implements ActivityBehavior {
     int nbrOfExecutionsJoined = joinedExecutions.size();
     
     if (nbrOfExecutionsJoined==nbrOfExecutionsToJoin) {
-      log.fine("parallel gateway '"+activity.getId()+"' activates: "+nbrOfExecutionsJoined+" of "+nbrOfExecutionsToJoin+" joined");
+      log.debug("parallel gateway '"+activity.getId()+"' activates: "+nbrOfExecutionsJoined+" of "+nbrOfExecutionsToJoin+" joined");
       execution.takeAll(outgoingTransitions, joinedExecutions);
       
-    } else if (log.isLoggable(Level.FINE)){
-      log.fine("parallel gateway '"+activity.getId()+"' does not activate: "+nbrOfExecutionsJoined+" of "+nbrOfExecutionsToJoin+" joined");
+    } else if (log.isDebugEnabled()){
+      log.debug("parallel gateway '"+activity.getId()+"' does not activate: "+nbrOfExecutionsJoined+" of "+nbrOfExecutionsToJoin+" joined");
     }
   }
 }

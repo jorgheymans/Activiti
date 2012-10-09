@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.impl.Condition;
@@ -36,7 +37,7 @@ import org.activiti.engine.impl.pvm.runtime.InterpretableExecution;
  */
 public class BpmnActivityBehavior {
 
-  private static Logger log = Logger.getLogger(BpmnActivityBehavior.class.getName());
+  private static Logger log = LoggerFactory.getLogger(BpmnActivityBehavior.class.getName());
 
   /**
    * Performs the default outgoing BPMN 2.0 behavior, which is having parallel
@@ -80,8 +81,8 @@ public class BpmnActivityBehavior {
   protected void performOutgoingBehavior(ActivityExecution execution, 
           boolean checkConditions, boolean throwExceptionIfExecutionStuck, List<ActivityExecution> reusableExecutions) {
 
-    if (log.isLoggable(Level.FINE)) {
-      log.fine("Leaving activity '" + execution.getActivity().getId() + "'");
+    if (log.isDebugEnabled()) {
+      log.debug("Leaving activity '" + execution.getActivity().getId() + "'");
     }
 
     String defaultSequenceFlow = (String) execution.getActivity().getProperty("default");
@@ -130,8 +131,8 @@ public class BpmnActivityBehavior {
           
         } else {
           
-          if (log.isLoggable(Level.FINE)) {
-            log.fine("No outgoing sequence flow found for " + execution.getActivity().getId() + ". Ending execution.");
+          if (log.isDebugEnabled()) {
+            log.debug("No outgoing sequence flow found for " + execution.getActivity().getId() + ". Ending execution.");
           }
           execution.end();
           

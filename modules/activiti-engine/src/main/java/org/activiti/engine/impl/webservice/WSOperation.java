@@ -13,7 +13,8 @@
 package org.activiti.engine.impl.webservice;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.impl.bpmn.webservice.MessageDefinition;
 import org.activiti.engine.impl.bpmn.webservice.MessageInstance;
@@ -27,7 +28,7 @@ import org.activiti.engine.impl.bpmn.webservice.OperationImplementation;
  */
 public class WSOperation implements OperationImplementation {
 
-  private static final Logger LOGGER = Logger.getLogger(WSOperation.class.getName());
+  private static final Logger LOGGER = LoggerFactory.getLogger(WSOperation.class.getName());
   
   protected String id;
 
@@ -74,7 +75,7 @@ public class WSOperation implements OperationImplementation {
     try {
       results = this.service.getClient().send(this.name, arguments);
     } catch (Exception e) {
-      LOGGER.log(Level.WARNING, "Error calling WS " + this.service.getName(), e);
+      LOGGER.warn("Error calling WS {}", this.service.getName(), e);
     }
     
     if (results == null) {

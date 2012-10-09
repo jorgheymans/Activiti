@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.delegate.Expression;
@@ -56,7 +57,7 @@ import org.activiti.engine.task.IdentityLinkType;
  */
 public class BpmnDeployer implements Deployer {
 
-  private static final Logger LOG = Logger.getLogger(BpmnDeployer.class.getName());;
+  private static final Logger LOG = LoggerFactory.getLogger(BpmnDeployer.class.getName());;
 
   public static final String[] BPMN_RESOURCE_SUFFIXES = new String[] { "bpmn20.xml", "bpmn" };
   public static final String[] DIAGRAM_SUFFIXES = new String[]{"png", "jpg", "gif", "svg"};
@@ -105,7 +106,7 @@ public class BpmnDeployer implements Deployer {
                   diagramResourceName = getProcessImageResourceName(resourceName, processDefinition.getKey(), "png");
                   createResource(diagramResourceName, diagramBytes, deployment);
               } catch (Throwable t) { // if anything goes wrong, we don't store the image (the process will still be executable).
-                LOG.log(Level.WARNING, "Error while generating process diagram, image will not be stored in repository", t);
+                LOG.warn("Error while generating process diagram, image will not be stored in repository", t);
               }
             } 
           }

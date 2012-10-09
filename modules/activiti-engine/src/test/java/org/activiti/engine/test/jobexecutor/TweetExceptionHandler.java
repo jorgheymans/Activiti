@@ -12,7 +12,8 @@
  */
 package org.activiti.engine.test.jobexecutor;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.impl.interceptor.CommandContext;
 import org.activiti.engine.impl.jobexecutor.JobHandler;
@@ -24,7 +25,7 @@ import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
  */
 public class TweetExceptionHandler implements JobHandler {
   
-  private static Logger log = Logger.getLogger(TweetExceptionHandler.class.getName());
+  private static Logger log = LoggerFactory.getLogger(TweetExceptionHandler.class.getName());
   
   protected int exceptionsRemaining = 2;
 

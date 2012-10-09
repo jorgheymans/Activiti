@@ -14,7 +14,8 @@
 package org.activiti.engine.impl.rules;
 
 import java.util.Map;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.persistence.deploy.Deployer;
@@ -34,7 +35,7 @@ import org.drools.io.ResourceFactory;
  */
 public class RulesDeployer implements Deployer {
   
-  private static Logger log = Logger.getLogger(RulesDeployer.class.getName());
+  private static Logger log = LoggerFactory.getLogger(RulesDeployer.class.getName());
 
   public void deploy(DeploymentEntity deployment) {
     KnowledgeBuilder knowledgeBuilder = null;

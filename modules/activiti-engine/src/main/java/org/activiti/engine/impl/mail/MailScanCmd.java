@@ -15,7 +15,8 @@ package org.activiti.engine.impl.mail;
 
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.mail.Flags;
 import javax.mail.Folder;
@@ -40,7 +41,7 @@ import org.activiti.engine.impl.persistence.entity.TaskEntity;
  */
 public class MailScanCmd implements Command<Object> {
   
-  private static Logger log = Logger.getLogger(MailScanCmd.class.getName());
+  private static Logger log = LoggerFactory.getLogger(MailScanCmd.class.getName());
 
   protected String userId;
   protected String imapUsername;
@@ -51,7 +52,7 @@ public class MailScanCmd implements Command<Object> {
   protected String toDoInActivitiFolderName;
   
   public Object execute(CommandContext commandContext) {
-    log.fine("scanning mail for user "+userId);
+    log.debug("scanning mail for user "+userId);
 
     Store store = null;
     Folder toDoFolder = null;
@@ -61,7 +62,7 @@ public class MailScanCmd implements Command<Object> {
 
       Session session = Session.getDefaultInstance(new Properties());
       store = session.getStore(imapProtocol);
-      log.fine("connecting to "+imapHost+" over "+imapProtocol+" for user "+imapUsername);
+      log.debug("connecting to "+imapHost+" over "+imapProtocol+" for user "+imapUsername);
       store.connect(imapHost, imapUsername, imapPassword);
 
       toDoFolder = store.getFolder(toDoFolderName);
@@ -70,12 +71,12 @@ public class MailScanCmd implements Command<Object> {
       toDoInActivitiFolder.open(Folder.READ_WRITE);
       
       Message[] messages = toDoFolder.getMessages();
-      log.fine("getting messages from myToDoFolder");
+      log.debug("getting messages from myToDoFolder");
 
       DbSqlSession dbSqlSession = commandContext.getDbSqlSession();
 
       for (Message message: messages) {
-        log.fine("transforming mail into activiti task: "+message.getSubject());
+        log.debug("transforming mail into activiti task: "+message.getSubject());
         MailTransformer mailTransformer = new MailTransformer(message);
 
         createTask(commandContext, dbSqlSession, mailTransformer);

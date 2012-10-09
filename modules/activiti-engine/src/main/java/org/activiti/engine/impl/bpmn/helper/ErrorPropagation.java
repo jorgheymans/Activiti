@@ -14,7 +14,8 @@
 package org.activiti.engine.impl.bpmn.helper;
 
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.delegate.BpmnError;
@@ -45,7 +46,7 @@ import org.activiti.engine.impl.pvm.runtime.InterpretableExecution;
  */
 public class ErrorPropagation {
 
-  private static final Logger LOG = Logger.getLogger(ErrorPropagation.class.getName());
+  private static final Logger LOG = LoggerFactory.getLogger(ErrorPropagation.class.getName());
 
   public static void propagateError(BpmnError error, ActivityExecution execution) throws Exception {    
     propagateError(error.getErrorCode(), execution);

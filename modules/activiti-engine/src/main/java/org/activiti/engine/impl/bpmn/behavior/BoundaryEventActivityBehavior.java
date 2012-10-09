@@ -15,7 +15,8 @@ package org.activiti.engine.impl.bpmn.behavior;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.pvm.PvmTransition;
@@ -28,7 +29,7 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
  */
 public class BoundaryEventActivityBehavior extends FlowNodeActivityBehavior {
   
-  private static Logger log = Logger.getLogger(BoundaryEventActivityBehavior.class.getName());
+  private static Logger log = LoggerFactory.getLogger(BoundaryEventActivityBehavior.class.getName());
   
   protected boolean interrupting;
   protected String activityId;

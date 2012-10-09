@@ -17,7 +17,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.delegate.BpmnError;
@@ -53,7 +54,7 @@ import org.activiti.engine.impl.pvm.runtime.AtomicOperation;
 public abstract class MultiInstanceActivityBehavior extends FlowNodeActivityBehavior  
   implements CompositeActivityBehavior, SubProcessActivityBehavior {
   
-  protected static final Logger LOGGER = Logger.getLogger(MultiInstanceActivityBehavior.class.getName());
+  protected static final Logger LOGGER = LoggerFactory.getLogger(MultiInstanceActivityBehavior.class.getName());
   
   // Variable names for outer instance(as described in spec)
   protected final String NUMBER_OF_INSTANCES = "nrOfInstances";
@@ -75,8 +76,6 @@ public abstract class MultiInstanceActivityBehavior extends FlowNodeActivityBeha
   /**
    * @param innerActivityBehavior The original {@link ActivityBehavior} of the activity 
    *                         that will be wrapped inside this behavior.
-   * @param isSequential Indicates whether the multi instance behavior
-   *                     must be sequential or parallel
    */
   public MultiInstanceActivityBehavior(ActivityImpl activity, AbstractBpmnActivityBehavior innerActivityBehavior) {
     this.activity = activity;
@@ -203,8 +202,8 @@ public abstract class MultiInstanceActivityBehavior extends FlowNodeActivityBeha
                 + "' does not evaluate to a boolean value");
       }
       Boolean booleanValue = (Boolean) value;
-      if (LOGGER.isLoggable(Level.FINE)) {
-        LOGGER.fine("Completion condition of multi-instance satisfied: " + booleanValue);
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("Completion condition of multi-instance satisfied: " + booleanValue);
       }
       return booleanValue;
     }
@@ -245,14 +244,14 @@ public abstract class MultiInstanceActivityBehavior extends FlowNodeActivityBeha
   
   protected void logLoopDetails(ActivityExecution execution, String custom, int loopCounter, 
           int nrOfCompletedInstances, int nrOfActiveInstances, int nrOfInstances) {
-    if (LOGGER.isLoggable(Level.FINE)) {
+    if (LOGGER.isDebugEnabled()) {
       StringBuilder strb = new StringBuilder();
       strb.append("Multi-instance '" + execution.getActivity() + "' " + custom + ". ");
       strb.append("Details: loopCounter=" + loopCounter + ", ");
       strb.append("nrOrCompletedInstances=" + nrOfCompletedInstances + ", ");
       strb.append("nrOfActiveInstances=" + nrOfActiveInstances+ ", ");
       strb.append("nrOfInstances=" + nrOfInstances);
-      LOGGER.fine(strb.toString());
+      LOGGER.debug(strb.toString());
     }
   }
 

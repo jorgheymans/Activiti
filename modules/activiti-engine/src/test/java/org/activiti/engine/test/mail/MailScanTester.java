@@ -21,17 +21,12 @@ import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.identity.User;
 import org.activiti.engine.impl.ProcessEngineImpl;
 import org.activiti.engine.impl.mail.MailScanner;
-import org.activiti.engine.impl.util.LogUtil;
 
 
 /**
  * @author Tom Baeyens
  */
 public class MailScanTester {
-  
-  static {
-    LogUtil.readJavaUtilLoggingConfigFromClasspath();
-  }
   
   public static void main(String[] args) {
     ProcessEngineImpl processEngine = (ProcessEngineImpl) ProcessEngines.getDefaultProcessEngine();

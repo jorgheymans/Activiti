@@ -16,7 +16,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
@@ -56,7 +57,7 @@ import org.activiti.engine.impl.pvm.runtime.InterpretableExecution;
  */
 public class CommandContext {
 
-  private static Logger log = Logger.getLogger(CommandContext.class.getName());
+  private static Logger log = LoggerFactory.getLogger(CommandContext.class.getName());
 
   protected Command< ? > command;
   protected TransactionContext transactionContext;
@@ -75,8 +76,8 @@ public class CommandContext {
         Context.setExecutionContext(execution);
         while (!nextOperations.isEmpty()) {
           AtomicOperation currentOperation = nextOperations.removeFirst();
-          if (log.isLoggable(Level.FINEST)) {
-            log.finest("AtomicOperation: " + currentOperation + " on " + this);
+          if (log.isTraceEnabled()) {
+            log.debug("AtomicOperation: " + currentOperation + " on " + this);
           }
           currentOperation.execute(execution);
         }
@@ -123,11 +124,13 @@ public class CommandContext {
           }
 
           if (exception != null) {
-            Level loggingLevel = Level.SEVERE;
-            if (exception instanceof ActivitiTaskAlreadyClaimedException) {
-              loggingLevel = Level.INFO; // reduce log level, because this is not really a technical exception
+            final String exceptionMessage = "Error while closing command context";
+            if (exception instanceof ActivitiTaskAlreadyClaimedException && log.isInfoEnabled()) {
+                log.info(exceptionMessage, exception);
+            } else if (log.isErrorEnabled()) {
+                log.error(exceptionMessage, exception);
             }
-            log.log(loggingLevel, "Error while closing command context", exception);
+
             transactionContext.rollback();
           }
         }
@@ -173,7 +176,7 @@ public class CommandContext {
     if (this.exception == null) {
       this.exception = exception;
     } else {
-      log.log(Level.SEVERE, "masked exception in command context. for root cause, see below as it will be rethrown later.", exception);
+      log.error( "masked exception in command context. for root cause, see below as it will be rethrown later.", exception);
     }
   }
 

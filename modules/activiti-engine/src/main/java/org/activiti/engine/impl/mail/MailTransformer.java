@@ -17,7 +17,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.mail.Address;
 import javax.mail.BodyPart;
@@ -32,7 +33,7 @@ import org.activiti.engine.impl.util.json.JSONObject;
 
 public class MailTransformer {
   
-  private static Logger log = Logger.getLogger(MailTransformer.class.getName());
+  private static Logger log = LoggerFactory.getLogger(MailTransformer.class.getName());
   
   public static int ATTACHMENT_SIZE_LIMIT = 1024*1024*10; // 10MB 
   
@@ -64,12 +65,12 @@ public class MailTransformer {
     byte[] bytes = jsonMailString.getBytes();
     attachment.setContent(new ByteArrayEntity(bytes));
     
-    log.fine("=== json ==========================");
-    log.fine(jsonMailString);
+    log.debug("=== json ==========================");
+    log.debug(jsonMailString);
 
-    log.fine("=== attachments ==========================");
+    log.debug("=== attachments ==========================");
     for (AttachmentEntity attachmentForLogging: attachments) {
-      log.fine(attachmentForLogging.getName()+" | "+attachmentForLogging.getType()+" | "+attachmentForLogging.getContent().getBytes().length);
+      log.debug(attachmentForLogging.getName()+" | "+attachmentForLogging.getType()+" | "+attachmentForLogging.getContent().getBytes().length);
     }
   }
 
@@ -157,7 +158,7 @@ public class MailTransformer {
 
   private static final String INDENT_WHITESPACE = "                                                                                ";
   void log(int indent, String msg) {
-    log.fine(INDENT_WHITESPACE.substring(0, indent*2)+msg.replaceAll("\\s", " "));
+    log.debug(INDENT_WHITESPACE.substring(0, indent*2)+msg.replaceAll("\\s", " "));
   }
 
   protected void processRecipients(Message message) throws Exception {

@@ -124,8 +124,8 @@ public class ParallelMultiInstanceBehavior extends MultiInstanceActivityBehavior
         }
       }
       for (ExecutionEntity executionToRemove : executionsToRemove) {
-        if (LOGGER.isLoggable(Level.FINE)) {
-          LOGGER.fine("Execution " + executionToRemove + " still active, "
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("Execution " + executionToRemove + " still active, "
                   + "but multi-instance is completed. Removing this execution.");
         }
         executionToRemove.inactivate();

@@ -25,7 +25,6 @@ import org.activiti.engine.ProcessEngineInfo;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.impl.util.IoUtil;
-import org.activiti.engine.impl.util.LogUtil;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Task;
@@ -64,8 +63,6 @@ public class DeployBarTask extends Task {
     Thread currentThread = Thread.currentThread();
     ClassLoader originalClassLoader = currentThread.getContextClassLoader(); 
     currentThread.setContextClassLoader(DeployBarTask.class.getClassLoader());
-    
-    LogUtil.readJavaUtilLoggingConfigFromClasspath();
     
     try {
       log("Initializing process engine " + processEngineName);

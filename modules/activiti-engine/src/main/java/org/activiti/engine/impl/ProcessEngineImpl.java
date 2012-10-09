@@ -13,7 +13,8 @@
 package org.activiti.engine.impl;
 
 import java.util.Map;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
@@ -38,7 +39,7 @@ import org.activiti.engine.impl.jobexecutor.JobExecutor;
  */
 public class ProcessEngineImpl implements ProcessEngine {
 
-  private static Logger log = Logger.getLogger(ProcessEngineImpl.class.getName());
+  private static Logger log = LoggerFactory.getLogger(ProcessEngineImpl.class.getName());
 
   protected String name;
   protected RepositoryService repositoryService;

@@ -19,7 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.impl.interceptor.CommandExecutor;
 
@@ -29,7 +30,7 @@ import org.activiti.engine.impl.interceptor.CommandExecutor;
  */
 public class MailScanSchedulerThread extends Thread {
   
-  private static Logger log = Logger.getLogger(MailScanSchedulerThread.class.getName());
+  private static Logger log = LoggerFactory.getLogger(MailScanSchedulerThread.class.getName());
 
   protected boolean isActive = false;
   protected int idleWaitInMillis = 10000;
@@ -57,7 +58,7 @@ public class MailScanSchedulerThread extends Thread {
 
   public void run() {
     isActive = true;
-    log.fine(getClass().getName()+" is started");
+    log.debug(getClass().getName()+" is started");
     while (isActive) {
       MailScanCmd mailScanCmd = getNextMailScanCmd();
       if (mailScanCmd != null) {
@@ -67,7 +68,7 @@ public class MailScanSchedulerThread extends Thread {
           // users need to logout and login if they want to re-enable mail scanning after a failure
           String userId = mailScanCmd.getUserId();
           // allMailScansCmds.remove(userId);
-          log.log(Level.SEVERE, "couldn't check todo mail for "+userId+": "+e.getMessage(), e);
+          log.error( "couldn't check todo mail for "+userId+": "+e.getMessage(), e);
         }
       }
       
@@ -77,7 +78,7 @@ public class MailScanSchedulerThread extends Thread {
         e1.printStackTrace();
       }
     }
-    log.fine(getClass().getName()+" is stopping");
+    log.debug(getClass().getName()+" is stopping");
   }
 
   protected MailScanCmd getNextMailScanCmd() {
@@ -85,15 +86,15 @@ public class MailScanSchedulerThread extends Thread {
     while (nextMailScanCmd == null) {
       while (allMailScansCmds.isEmpty() && nextMailScanCmds.isEmpty()) {
         try {
-          log.fine("sleeping for "+idleWaitInMillis+" millis");
+          log.debug("sleeping for "+idleWaitInMillis+" millis");
           Thread.sleep(idleWaitInMillis);
         } catch (InterruptedException e) {
-          log.fine("sleep got interrupted");
+          log.debug("sleep got interrupted");
           return null;
         }
       }
       if (nextMailScanCmds.isEmpty()) {
-        log.fine("scheduling mailscans for users "+allMailScansCmds.keySet());
+        log.debug("scheduling mailscans for users "+allMailScansCmds.keySet());
         nextMailScanCmds.addAll(allMailScansCmds.values());
       }
       synchronized (this) {
@@ -113,7 +114,7 @@ public class MailScanSchedulerThread extends Thread {
       try {
         join();
       } catch (InterruptedException e) {
-        log.log(Level.WARNING, "Interruption while shutting down " + this.getClass().getName(), e);
+        log.warn( "Interruption while shutting down " + this.getClass().getName(), e);
       }
     }
   }

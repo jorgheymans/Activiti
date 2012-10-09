@@ -12,7 +12,8 @@
  */
 package org.activiti.engine.impl.interceptor;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.transaction.Status;
 import javax.transaction.SystemException;
@@ -29,7 +30,7 @@ import org.activiti.engine.ActivitiException;
  */
 public class JtaRetryInterceptor extends RetryInterceptor {
 
-  private final Logger log = Logger.getLogger(JtaRetryInterceptor.class.getName());
+  private final Logger log = LoggerFactory.getLogger(JtaRetryInterceptor.class.getName());
 
   protected final TransactionManager transactionManager;
 
@@ -40,7 +41,7 @@ public class JtaRetryInterceptor extends RetryInterceptor {
   @Override
   public <T> T execute(Command<T> command) {
     if (calledInsideTransaction()) {
-      log.finest("Called inside transaction, skipping the retry interceptor.");
+      log.debug("Called inside transaction, skipping the retry interceptor.");
       return next.execute(command);
     } else {
       return super.execute(command);

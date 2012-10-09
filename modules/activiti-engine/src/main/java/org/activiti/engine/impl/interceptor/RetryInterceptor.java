@@ -13,7 +13,8 @@
 package org.activiti.engine.impl.interceptor;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiOptimisticLockingException;
@@ -27,7 +28,7 @@ import org.activiti.engine.ActivitiOptimisticLockingException;
  */
 public class RetryInterceptor extends CommandInterceptor {
 
-  Logger log = Logger.getLogger(RetryInterceptor.class.getName());
+  Logger log = LoggerFactory.getLogger(RetryInterceptor.class.getName());
 
   protected int numOfRetries = 3;
   protected int waitTimeInMs = 50;
@@ -50,7 +51,7 @@ public class RetryInterceptor extends CommandInterceptor {
         return next.execute(command);
 
       } catch (ActivitiOptimisticLockingException e) {
-        log.log(Level.INFO, "Caught optimistic locking exception: "+e);
+        log.info( "Caught optimistic locking exception: "+e);
       }
             
       failedAttempts ++;      
@@ -63,7 +64,7 @@ public class RetryInterceptor extends CommandInterceptor {
     try {
       Thread.sleep(waitTime);
     } catch (InterruptedException e) {
-      log.finest("I am interrupted while waiting for a retry.");
+      log.debug("I am interrupted while waiting for a retry.");
     }
   }
 

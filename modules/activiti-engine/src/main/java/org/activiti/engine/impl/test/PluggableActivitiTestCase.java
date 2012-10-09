@@ -13,7 +13,8 @@
 
 package org.activiti.engine.impl.test;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ProcessEngine;
@@ -34,7 +35,7 @@ import org.activiti.engine.ProcessEngines;
  */
 public class PluggableActivitiTestCase extends AbstractActivitiTestCase {
   
-  private static Logger pluggableActivitiTestCaseLogger = Logger.getLogger(PluggableActivitiTestCase.class.getName());
+  private static Logger pluggableActivitiTestCaseLogger = LoggerFactory.getLogger(PluggableActivitiTestCase.class.getName());
   
   protected static ProcessEngine cachedProcessEngine;
 

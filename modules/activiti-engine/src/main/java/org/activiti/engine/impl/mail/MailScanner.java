@@ -17,7 +17,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.impl.interceptor.CommandExecutor;
@@ -28,7 +29,7 @@ import org.activiti.engine.impl.interceptor.CommandExecutor;
  */
 public class MailScanner {
   
-  private static Logger log = Logger.getLogger(MailScanner.class.getName());
+  private static Logger log = LoggerFactory.getLogger(MailScanner.class.getName());
   
   protected Thread thread = null;
   protected boolean isActive = false;
@@ -62,7 +63,7 @@ public class MailScanner {
       }
       
       // Create the mail scan scheduler
-      log.fine("MailScanner is starting the "+MailScanSchedulerThread.class.getName());
+      log.debug("MailScanner is starting the "+MailScanSchedulerThread.class.getName());
       mailScanSchedulerThread.start();
     }
   }

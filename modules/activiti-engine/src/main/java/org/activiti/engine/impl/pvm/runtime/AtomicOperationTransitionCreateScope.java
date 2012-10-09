@@ -12,7 +12,8 @@
  */
 package org.activiti.engine.impl.pvm.runtime;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 
@@ -22,7 +23,7 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
  */
 public class AtomicOperationTransitionCreateScope implements AtomicOperation {
   
-  private static Logger log = Logger.getLogger(AtomicOperationTransitionCreateScope.class.getName());
+  private static Logger log = LoggerFactory.getLogger(AtomicOperationTransitionCreateScope.class.getName());
   
   public boolean isAsync(InterpretableExecution execution) {
     ActivityImpl activity = (ActivityImpl) execution.getActivity();
@@ -39,7 +40,7 @@ public class AtomicOperationTransitionCreateScope implements AtomicOperation {
       execution.setTransition(null);
       execution.setActivity(null);
       execution.setActive(false);
-      log.fine("create scope: parent "+execution+" continues as execution "+propagatingExecution);
+      log.debug("create scope: parent "+execution+" continues as execution "+propagatingExecution);
       propagatingExecution.initialize();
 
     } else {

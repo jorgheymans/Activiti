@@ -16,7 +16,8 @@ package org.activiti.engine.impl.jobexecutor;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.impl.cmd.AcquireJobsCmd;
 import org.activiti.engine.impl.interceptor.Command;
@@ -38,7 +39,7 @@ import org.activiti.engine.runtime.Job;
  */
 public abstract class JobExecutor {
   
-  private static Logger log = Logger.getLogger(JobExecutor.class.getName());
+  private static Logger log = LoggerFactory.getLogger(JobExecutor.class.getName());
 
   protected String name = "JobExecutor["+getClass().getName()+"]";
   protected CommandExecutor commandExecutor;
@@ -181,10 +182,9 @@ public abstract class JobExecutor {
 		try {
 			jobAcquisitionThread.join();
 		} catch (InterruptedException e) {
-			log.log(
-					Level.WARNING,
-					"Interrupted while waiting for the job Acquisition thread to terminate",
-					e);
+			if (log.isWarnEnabled()) {
+				log.warn("Interrupted while waiting for the job Acquisition thread to terminate",e);
+            }
 		}	
 		jobAcquisitionThread = null;
 	}

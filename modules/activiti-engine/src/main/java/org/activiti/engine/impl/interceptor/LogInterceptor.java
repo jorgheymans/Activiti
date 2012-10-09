@@ -14,7 +14,8 @@
 package org.activiti.engine.impl.interceptor;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.impl.util.ClassNameUtil;
 
@@ -24,22 +25,22 @@ import org.activiti.engine.impl.util.ClassNameUtil;
  */
 public class LogInterceptor extends CommandInterceptor {
   
-  private static Logger log = Logger.getLogger(LogInterceptor.class.getName());
+  private static Logger log = LoggerFactory.getLogger(LogInterceptor.class.getName());
 
   public <T> T execute(Command<T> command) {
-    if (!log.isLoggable(Level.FINE)) {
+    if (!log.isDebugEnabled()) {
       // do nothing here if we cannot log
       return next.execute(command);
     }
-    log.fine("                                                                                                    ");
-    log.fine("--- starting " + ClassNameUtil.getClassNameWithoutPackage(command) + " --------------------------------------------------------");
+    log.debug("                                                                                                    ");
+    log.debug("--- starting " + ClassNameUtil.getClassNameWithoutPackage(command) + " --------------------------------------------------------");
     try {
 
       return next.execute(command);
 
     } finally {
-      log.fine("--- " + ClassNameUtil.getClassNameWithoutPackage(command) + " finished --------------------------------------------------------");
-      log.fine("                                                                                                    ");
+      log.debug("--- " + ClassNameUtil.getClassNameWithoutPackage(command) + " finished --------------------------------------------------------");
+      log.debug("                                                                                                    ");
     }
   }
 

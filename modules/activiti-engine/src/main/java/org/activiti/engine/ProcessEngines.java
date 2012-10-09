@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.impl.ProcessEngineInfoImpl;
 import org.activiti.engine.impl.util.IoUtil;
@@ -60,7 +61,7 @@ import org.activiti.engine.impl.util.ReflectUtil;
  */
 public abstract class ProcessEngines {
   
-  private static Logger log = Logger.getLogger(ProcessEngines.class.getName());
+  private static Logger log = LoggerFactory.getLogger(ProcessEngines.class.getName());
   
   public static final String NAME_DEFAULT = "default";
   
@@ -171,7 +172,7 @@ public abstract class ProcessEngines {
       processEngines.put(processEngineName, processEngine);
       processEngineInfosByName.put(processEngineName, processEngineInfo);
     } catch (Throwable e) {
-      log.log(Level.SEVERE, "Exception while initializing process engine :" + e.getMessage(), e);
+      log.error( "Exception while initializing process engine :" + e.getMessage(), e);
       processEngineInfo = new ProcessEngineInfoImpl(null, resourceUrlString, getExceptionString(e));
     }
     processEngineInfosByResourceUrl.put(resourceUrlString, processEngineInfo);
@@ -229,7 +230,7 @@ public abstract class ProcessEngines {
   /** retries to initialize a process engine that previously failed.
    */
   public static ProcessEngineInfo retry(String resourceUrl) {
-    log.fine("retying initializing of resource " + resourceUrl);
+    log.debug("retying initializing of resource " + resourceUrl);
     try {
       return initProcessEnginFromResource(new URL(resourceUrl));
     } catch (MalformedURLException e) {
@@ -255,7 +256,7 @@ public abstract class ProcessEngines {
         try {
           processEngine.close();
         } catch (Exception e) {
-          log.log(Level.SEVERE, "exception while closing "+(processEngineName==null ? "the default process engine" : "process engine "+processEngineName), e);
+          log.error( "exception while closing "+(processEngineName==null ? "the default process engine" : "process engine "+processEngineName), e);
         }
       }
       

@@ -21,7 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.delegate.ExecutionListener;
@@ -132,7 +133,7 @@ import org.activiti.engine.repository.ProcessDefinition;
  */
 public class BpmnParse extends Parse {
 
-  protected static final Logger LOGGER = Logger.getLogger(BpmnParse.class.getName());
+  protected static final Logger LOGGER = LoggerFactory.getLogger(BpmnParse.class.getName());
 
   public static final String PROPERTYNAME_DOCUMENTATION = "documentation";
   public static final String PROPERTYNAME_INITIAL = "initial";
@@ -227,7 +228,7 @@ public class BpmnParse extends Parse {
       parseRootElement();
 
     } catch (Exception e) {
-      LOGGER.log(Level.SEVERE, "Unknown exception", e);
+      LOGGER.error("Unknown exception", e);
       
       // ALL unexpected exceptions should bubble up since they are not handled
       // accordingly by onderlying parse-methods and can't be deployed
@@ -315,9 +316,6 @@ public class BpmnParse extends Parse {
 
   /**
    * Parses the rootElement importing structures
-   * 
-   * @param rootElement
-   *          The root element of the XML file.
    */
   protected void parseImports() {
     List<Element> imports = rootElement.elements("import");
@@ -355,9 +353,6 @@ public class BpmnParse extends Parse {
    * Parses the itemDefinitions of the given definitions file. Item definitions
    * are not contained within a process element, but they can be referenced from
    * inner process elements.
-   * 
-   * @param definitionsElement
-   *          The root element of the XML file.
    */
   public void parseItemDefinitions() {
     for (Element itemDefinitionElement : rootElement.elements("itemDefinition")) {
@@ -387,9 +382,6 @@ public class BpmnParse extends Parse {
    * Parses the messages of the given definitions file. Messages are not
    * contained within a process element, but they can be referenced from inner
    * process elements.
-   * 
-   * @param definitionsElement
-   *          The root element of the XML file/
    */
   public void parseMessages() {
     for (Element messageElement : rootElement.elements("message")) {
@@ -416,9 +408,6 @@ public class BpmnParse extends Parse {
    * Parses the signals of the given definitions file. Signals are not
    * contained within a process element, but they can be referenced from inner
    * process elements.
-   * 
-   * @param definitionsElement
-   *          The root element of the XML file/
    */
   protected void parseSignals() {
     for (Element signalElement : rootElement.elements("signal")) {
@@ -448,9 +437,6 @@ public class BpmnParse extends Parse {
 
   /**
    * Parses the interfaces and operations defined withing the root element.
-   * 
-   * @param definitionsElement
-   *          The root element of the XML file/
    */
   public void parseInterfaces() {
     for (Element interfaceElement : rootElement.elements("interface")) {
@@ -523,9 +509,6 @@ public class BpmnParse extends Parse {
   /**
    * Parses all the process definitions defined within the 'definitions' root
    * element.
-   * 
-   * @param definitionsElement
-   *          The root element of the XML file.
    */
   public void parseProcessDefinitions() {
     for (Element processElement : rootElement.elements("process")) {
@@ -599,8 +582,8 @@ public class BpmnParse extends Parse {
     processDefinition.setTaskDefinitions(new HashMap<String, TaskDefinition>());
     processDefinition.setDeploymentId(deployment.getId());
 
-    if (LOGGER.isLoggable(Level.FINE)) {
-      LOGGER.fine("Parsing process " + processDefinition.getKey());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Parsing process " + processDefinition.getKey());
     }
     parseScope(processElement, processDefinition);
     
@@ -1104,7 +1087,6 @@ public class BpmnParse extends Parse {
    * @param scopeElement
    *          The {@link ScopeImpl} to which the activities must be added.
    * @param postponedElements 
-   * @param postProcessActivities 
    */
   public void parseActivities(Element parentElement, ScopeImpl scopeElement, HashMap<String, Element> postponedElements) {
     for (Element activityElement : parentElement.elements()) {
@@ -1458,8 +1440,8 @@ public class BpmnParse extends Parse {
    */
   public ActivityImpl createActivityOnScope(Element activityElement, ScopeImpl scopeElement) {
     String id = activityElement.attribute("id");
-    if (LOGGER.isLoggable(Level.FINE)) {
-      LOGGER.fine("Parsing activity " + id);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Parsing activity " + id);
     }
     ActivityImpl activity = scopeElement.createActivity(id);
 
@@ -2411,8 +2393,8 @@ public class BpmnParse extends Parse {
       // Representation structure-wise is a nested activity in the activity to
       // which its attached
       String id = boundaryEventElement.attribute("id");
-      if (LOGGER.isLoggable(Level.FINE)) {
-        LOGGER.fine("Parsing boundary event " + id);
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("Parsing boundary event " + id);
       }
 
       ActivityImpl parentActivity = scopeElement.findActivity(attachedToRef);
@@ -3027,7 +3009,6 @@ public class BpmnParse extends Parse {
    *          the XML element containing the scope definition.
    * @param scope
    *          the scope to add the executionListeners to.
-   * @param postProcessActivities 
    */
   public void parseExecutionListenersOnScope(Element scopeElement, ScopeImpl scope) {
     Element extentionsElement = scopeElement.element("extensionElements");

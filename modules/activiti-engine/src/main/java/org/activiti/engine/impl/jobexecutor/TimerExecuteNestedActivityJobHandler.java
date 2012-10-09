@@ -13,7 +13,8 @@
 package org.activiti.engine.impl.jobexecutor;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.impl.interceptor.CommandContext;
@@ -27,7 +28,7 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
  */
 public class TimerExecuteNestedActivityJobHandler implements JobHandler {
   
-  private static Logger log = Logger.getLogger(TimerExecuteNestedActivityJobHandler.class.getName());
+  private static Logger log = LoggerFactory.getLogger(TimerExecuteNestedActivityJobHandler.class.getName());
   
   public static final String TYPE = "timer-transition";
 
@@ -49,11 +50,11 @@ public class TimerExecuteNestedActivityJobHandler implements JobHandler {
         .execute(execution);
       
     } catch (RuntimeException e) {
-      log.log(Level.SEVERE, "exception during timer execution", e);
+      log.error( "exception during timer execution", e);
       throw e;
       
     } catch (Exception e) {
-      log.log(Level.SEVERE, "exception during timer execution", e);
+      log.error( "exception during timer execution", e);
       throw new ActivitiException("exception during timer execution: "+e.getMessage(), e);
     }
   }

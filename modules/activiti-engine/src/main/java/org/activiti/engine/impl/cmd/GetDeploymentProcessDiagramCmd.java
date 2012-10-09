@@ -15,7 +15,8 @@ package org.activiti.engine.impl.cmd;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.impl.context.Context;
@@ -33,7 +34,7 @@ import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 public class GetDeploymentProcessDiagramCmd implements Command<InputStream>, Serializable {
 
   private static final long serialVersionUID = 1L;
-  private static Logger log = Logger.getLogger(GetDeploymentProcessDiagramCmd.class.getName());
+  private static Logger log = LoggerFactory.getLogger(GetDeploymentProcessDiagramCmd.class.getName());
   
   protected String processDefinitionId;
 

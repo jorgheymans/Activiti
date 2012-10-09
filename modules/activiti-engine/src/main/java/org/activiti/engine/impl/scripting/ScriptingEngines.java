@@ -13,7 +13,8 @@
 package org.activiti.engine.impl.scripting;
 
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
@@ -29,7 +30,7 @@ import org.activiti.engine.delegate.VariableScope;
  */
 public class ScriptingEngines {
 
-  private static Logger log = Logger.getLogger(ScriptingEngines.class.getName());
+  private static Logger log = LoggerFactory.getLogger(ScriptingEngines.class.getName());
   public static final String DEFAULT_SCRIPTING_LANGUAGE = "juel";
 
   private final ScriptEngineManager scriptEngineManager;

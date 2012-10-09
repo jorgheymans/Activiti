@@ -13,7 +13,8 @@
 
 package org.activiti.engine.test.concurrency;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiOptimisticLockingException;
 import org.activiti.engine.impl.RuntimeServiceImpl;
@@ -32,7 +33,7 @@ import org.activiti.engine.test.Deployment;
  */
 public class CompetingSignalsTest extends PluggableActivitiTestCase {
 
-  private static Logger log = Logger.getLogger(CompetingSignalsTest.class.getName());
+  private static Logger log = LoggerFactory.getLogger(CompetingSignalsTest.class.getName());
   
   Thread testThread = Thread.currentThread();
   static ControllableThread activeThread;
@@ -58,7 +59,7 @@ public class CompetingSignalsTest extends PluggableActivitiTestCase {
       } catch (ActivitiOptimisticLockingException e) {
         this.exception = e;
       }
-      log.fine(getName()+" ends");
+      log.debug(getName()+" ends");
     }
   }
   
@@ -73,19 +74,19 @@ public class CompetingSignalsTest extends PluggableActivitiTestCase {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("CompetingSignalsProcess");
     String processInstanceId = processInstance.getId();
 
-    log.fine("test thread starts thread one");
+    log.debug("test thread starts thread one");
     SignalThread threadOne = new SignalThread(processInstanceId);
     threadOne.startAndWaitUntilControlIsReturned();
     
-    log.fine("test thread continues to start thread two");
+    log.debug("test thread continues to start thread two");
     SignalThread threadTwo = new SignalThread(processInstanceId);
     threadTwo.startAndWaitUntilControlIsReturned();
 
-    log.fine("test thread notifies thread 1");
+    log.debug("test thread notifies thread 1");
     threadOne.proceedAndWaitTillDone();
     assertNull(threadOne.exception);
 
-    log.fine("test thread notifies thread 2");
+    log.debug("test thread notifies thread 2");
     threadTwo.proceedAndWaitTillDone();
     assertNotNull(threadTwo.exception);
     assertTextPresent("was updated by another transaction concurrently", threadTwo.exception.getMessage());
@@ -103,19 +104,19 @@ public class CompetingSignalsTest extends PluggableActivitiTestCase {
       ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("CompetingSignalsProcess");
       String processInstanceId = processInstance.getId();
   
-      log.fine("test thread starts thread one");
+      log.debug("test thread starts thread one");
       SignalThread threadOne = new SignalThread(processInstanceId);
       threadOne.startAndWaitUntilControlIsReturned();
       
-      log.fine("test thread continues to start thread two");
+      log.debug("test thread continues to start thread two");
       SignalThread threadTwo = new SignalThread(processInstanceId);
       threadTwo.startAndWaitUntilControlIsReturned();
   
-      log.fine("test thread notifies thread 1");
+      log.debug("test thread notifies thread 1");
       threadOne.proceedAndWaitTillDone();
       assertNull(threadOne.exception);
   
-      log.fine("test thread notifies thread 2");
+      log.debug("test thread notifies thread 2");
       threadTwo.proceedAndWaitTillDone();
       assertNull(threadTwo.exception);
     } finally {

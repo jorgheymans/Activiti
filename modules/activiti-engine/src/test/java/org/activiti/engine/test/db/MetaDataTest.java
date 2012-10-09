@@ -15,7 +15,8 @@ package org.activiti.engine.test.db;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.impl.ProcessEngineImpl;
 import org.activiti.engine.impl.db.DbSqlSession;
@@ -30,7 +31,7 @@ import org.apache.ibatis.session.SqlSession;
  */
 public class MetaDataTest extends PluggableActivitiTestCase {
   
-  private static Logger log = Logger.getLogger(MetaDataTest.class.getName());
+  private static Logger log = LoggerFactory.getLogger(MetaDataTest.class.getName());
 
   public void testMetaData() {
     ((ProcessEngineImpl)processEngine)

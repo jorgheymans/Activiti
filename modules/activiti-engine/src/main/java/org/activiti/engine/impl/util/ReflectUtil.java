@@ -18,7 +18,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiClassLoadingException;
 import org.activiti.engine.ActivitiException;
@@ -31,7 +32,7 @@ import org.activiti.engine.impl.context.Context;
  */
 public abstract class ReflectUtil {
 
-  private static final Logger LOG = Logger.getLogger(ReflectUtil.class.getName());
+  private static final Logger LOG = LoggerFactory.getLogger(ReflectUtil.class.getName());
   
   public static ClassLoader getClassLoader() {
     ClassLoader loader = getCustomClassLoader();
@@ -50,7 +51,9 @@ public abstract class ReflectUtil {
    
    if(classLoader != null) {
      try {
-       LOG.finest("Trying to load class with custom classloader: " + className);
+       if (LOG.isTraceEnabled()) {
+           LOG.trace("Trying to load class with custom classloader: {}", className);
+       }
        clazz = Class.forName(className, true, classLoader);
      } catch(Throwable t) {
        throwable = t;
@@ -58,7 +61,9 @@ public abstract class ReflectUtil {
    }
    if(clazz == null) {
      try {
-       LOG.finest("Trying to load class with current thread context classloader: " + className);
+       if (LOG.isTraceEnabled()) {
+           LOG.trace("Trying to load class with current thread context classloader: {}" + className);
+       }
        clazz = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
      } catch(Throwable t) {
        if(throwable == null) {
@@ -67,7 +72,9 @@ public abstract class ReflectUtil {
      }
      if(clazz == null) {
        try {
-         LOG.finest("Trying to load class with local classloader: " + className);
+         if (LOG.isTraceEnabled()) {
+             LOG.trace("Trying to load class with local classloader: " + className);
+         }
          clazz = Class.forName(className, true, ReflectUtil.class.getClassLoader());
        } catch(Throwable t) {
          if(throwable == null) {

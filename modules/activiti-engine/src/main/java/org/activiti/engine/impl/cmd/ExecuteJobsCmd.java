@@ -14,7 +14,8 @@ package org.activiti.engine.impl.cmd;
 
 import java.io.Serializable;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.impl.cfg.TransactionState;
@@ -34,7 +35,7 @@ public class ExecuteJobsCmd implements Command<Object>, Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private static Logger log = Logger.getLogger(ExecuteJobsCmd.class.getName());
+  private static Logger log = LoggerFactory.getLogger(ExecuteJobsCmd.class.getName());
   
   protected String jobId;
 
@@ -47,8 +48,8 @@ public class ExecuteJobsCmd implements Command<Object>, Serializable {
       throw new ActivitiException("jobId is null");
     }
     
-    if (log.isLoggable(Level.FINE)) {
-      log.fine("Executing job " + jobId);
+    if (log.isDebugEnabled()) {
+      log.debug("Executing job " + jobId);
     }
     JobEntity job = commandContext
       .getJobManager()
