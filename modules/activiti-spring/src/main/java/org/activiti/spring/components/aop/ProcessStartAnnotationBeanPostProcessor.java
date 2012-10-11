@@ -18,8 +18,8 @@ package org.activiti.spring.components.aop;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.spring.annotations.ProcessVariable;
 import org.activiti.spring.annotations.StartProcess;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.Advised;
 import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.aop.framework.ProxyConfig;
@@ -41,7 +41,7 @@ import org.springframework.util.ClassUtils;
  */
 public class ProcessStartAnnotationBeanPostProcessor extends ProxyConfig implements BeanPostProcessor, InitializingBean {
 
-	private Log log = LogFactory.getLog(getClass()) ;
+	private Logger log = LoggerFactory.getLogger(getClass()) ;
 
 	/**
 	 * the process engine as created by a {@link org.activiti.spring.ProcessEngineFactoryBean}
