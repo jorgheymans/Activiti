@@ -18,8 +18,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
@@ -37,6 +35,8 @@ import org.activiti.cdi.impl.util.ProgrammaticBeanLookup;
 import org.activiti.cdi.spi.ProcessEngineLookup;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ProcessEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * CDI-Extension registering a custom context for {@link BusinessProcessScoped}
@@ -49,7 +49,8 @@ import org.activiti.engine.ProcessEngine;
  */
 public class ActivitiExtension implements Extension {
 
-  private static Logger logger = Logger.getLogger(ActivitiExtension.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(ActivitiExtension.class.getName());
+
   private ProcessEngineLookup processEngineLookup;
 
   public void beforeBeanDiscovery(@Observes final BeforeBeanDiscovery event) {
@@ -63,7 +64,7 @@ public class ActivitiExtension implements Extension {
 
   public void afterDeploymentValidation(@Observes AfterDeploymentValidation event, BeanManager beanManager) {
     try {   
-      logger.info("Initializing activiti-cdi.");      
+      logger.info("Initializing activiti-cdi.");
       // initialize the process engine
       ProcessEngine processEngine = lookupProcessEngine(beanManager);      
       // deploy the processes if engine was set up correctly
@@ -95,10 +96,10 @@ public class ActivitiExtension implements Extension {
       processEngine = processEngineLookup.getProcessEngine();
       if(processEngine != null) {
         this.processEngineLookup = processEngineLookup;
-        logger.log(Level.FINE, "ProcessEngineLookup service "+processEngineLookup.getClass()+" returned process engine.");
+        logger.debug("ProcessEngineLookup service " + processEngineLookup.getClass() + " returned process engine.");
         break;
       } else {
-        logger.log(Level.FINE, "ProcessEngineLookup service "+processEngineLookup.getClass()+" retuned 'null' value.");
+        logger.debug("ProcessEngineLookup service " + processEngineLookup.getClass() + " retuned 'null' value.");
       }
     }
     
@@ -122,7 +123,7 @@ public class ActivitiExtension implements Extension {
       processEngineLookup.ungetProcessEngine();
       processEngineLookup = null;
     }
-    logger.info("Shutting down activiti-cdi");    
+    logger.info("Shutting down activiti-cdi");
   }
 
 }

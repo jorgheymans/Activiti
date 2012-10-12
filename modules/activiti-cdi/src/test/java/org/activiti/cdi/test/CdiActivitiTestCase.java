@@ -15,7 +15,6 @@ package org.activiti.cdi.test;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Callable;
-import java.util.logging.Logger;
 
 import javax.enterprise.inject.spi.BeanManager;
 
@@ -52,8 +51,6 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public abstract class CdiActivitiTestCase {
 
-  protected Logger logger = Logger.getLogger(getClass().getName());
-    
   @Deployment
   public static JavaArchive createDeployment() {
     
